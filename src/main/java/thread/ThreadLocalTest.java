@@ -14,7 +14,6 @@ import java.util.concurrent.*;
  */
 public class ThreadLocalTest {
     public static ThreadLocal<String> localVariable = new ThreadLocal<>();
-    public static ThreadLocal<String> localVariable1 = new ThreadLocal<>();
     public static void main(String[] args) {
         ThreadFactory nameThreadFactory = new ThreadFactoryBuilder().setNameFormat("demo-thread-%d").build();
         ExecutorService pool = new ThreadPoolExecutor(2, 4, 1000, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<Runnable>(6),
