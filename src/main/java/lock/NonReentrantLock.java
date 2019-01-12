@@ -38,6 +38,10 @@ public class NonReentrantLock  implements Lock, Serializable{
         sync.release(1);
     }
 
+    public boolean isLocked() {
+        return sync.isHeldExclusively();
+    }
+
     @Override
     public Condition newCondition() {
         return sync.newCondition();
