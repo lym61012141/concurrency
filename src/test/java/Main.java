@@ -5,15 +5,22 @@
 public class Main {
     static int a = 1;
     static Integer b = 1;
-    static Person person = new Person();
+//    static Person person = new Person();
 
 
     public static void main(String[] args) {
-        person.setName("asdf");
+        Person person = new Person("aaa");
+        // 仅仅是person 的指针地址赋值给p
+        Person p= person;
+        System.out.println(p.equals(person));
+        // person 的指针地址发生变化，不会影响p的指针地址
+        person = new Person("bbb");
+        System.out.println(p.getName());
+        /*person.setName("asdf");
         modifyPerson(person);
         System.out.println(person.getName());
         System.out.println(add(a));
-        System.out.println(b);
+        System.out.println(b);*/
     }
 
     static int add(int add) {
