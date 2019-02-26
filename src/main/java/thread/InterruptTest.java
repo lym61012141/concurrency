@@ -12,15 +12,14 @@ public class InterruptTest {
             public void run() {
                 System.out.println(Thread.currentThread().getName()+" is begin");
 
-                while (!Thread.currentThread().isInterrupted()) {
-//                    System.out.println(Thread.currentThread() + "is running");
-                }
-                System.out.println(Thread.currentThread()+" out running");
+                while (!Thread.currentThread().isInterrupted())
+
+                    System.out.println(Thread.currentThread()+" is running");
             }
         });
 
         thread.start();
-        Thread.sleep(10000);
+        Thread.sleep(1000);
         System.out.println("main thread interrupt child thread");
         thread.interrupt();
         thread.join();
