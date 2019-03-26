@@ -4,6 +4,7 @@
 
 **DeadLock**
 * 死锁原因:相互持有各自的资源不释放
+* 使持有顺序一致解决问题
 
 **InterruptedMethod**
  * interrupted() 会清除中断标志, isInterrupted()不会,
@@ -27,3 +28,8 @@
 
 **thread.consumerproducer.otherdemo.ConPro**
 - jdk 文档给与的生产者消费者模型
+
+**atomic.AtomicLongTest**
+
+ * 多线程下测试AtomicLong 原子性
+
