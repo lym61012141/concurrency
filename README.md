@@ -32,4 +32,7 @@
 **atomic.AtomicLongTest**
 
  * 多线程下测试AtomicLong 原子性
+ 
+**lock.LockSupportTest**
+* 测试park() unpark() 使用jstack 测试park(),park(this)区别
 
