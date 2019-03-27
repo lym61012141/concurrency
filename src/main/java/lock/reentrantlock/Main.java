@@ -1,7 +1,9 @@
 package lock.reentrantlock;
 
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.concurrent.locks.AbstractQueuedSynchronizer;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -14,28 +16,32 @@ import java.util.concurrent.locks.ReentrantLock;
  * 时间： 20:49
  */
 public class Main {
-    public static void main(String[] args) throws InterruptedException, IllegalAccessException, InstantiationException {
+    public static void main(String[] args) throws InterruptedException, IllegalAccessException, InstantiationException, NoSuchFieldException, InvocationTargetException {
+        /**
+         * 想使用sync 的方法及其父类的方法,以便于测试,例如获取AbstractQueuedSynchronizer内部Node 类型的字段
+         * 使用反射的方式获取要用的字段及方法,通过反射调用
+         */
         ReentrantTest state = new ReentrantTest();
-        AbstractQueuedSynchronizer abstractQueuedSynchronizer = new AbstractQueuedSynchronizer() {
-            @Override
-            protected boolean tryAcquire(int arg) {
-                return super.tryAcquire(arg);
-            }
-        };
-
-        Class<?>[] declaredClasses = ReentrantLock.class.getDeclaredClasses();
         ReentrantLock lock = new ReentrantLock();
-        Class<?> superclass = lock.getClass().getDeclaredClasses()[2].getSuperclass();
-        Method[] declaredMethods = superclass.getDeclaredMethods();
+        Field syncField = lock.getClass().getDeclaredField("sync");
+        syncField.setAccessible(true);
+        Object o = syncField.get(lock);
+        lock.lock();
+        Method[] declaredMethods = o.getClass().getSuperclass().getDeclaredMethods();
+        Field head = o.getClass().getSuperclass().getSuperclass().getDeclaredField("head");
+        Field tail = o.getClass().getSuperclass().getSuperclass().getDeclaredField("tail");
+        head.setAccessible(true);
+        tail.setAccessible(true);
+        Object o1 = tail.get(o);
+        Object o2 = head.get(o);
         for (Method method : declaredMethods) {
             method.setAccessible(true);
-//            method.invoke()
+            method.invoke(o);
         }
+        lock.lock();
 
-        for (Class<?> declaredClass : declaredClasses) {
-            declaredClass.getDeclaredClasses();
-        }
 
+        System.out.println();
 
 //        state.sameThreadReentrant();
 //        state.diffThreadReentrant();

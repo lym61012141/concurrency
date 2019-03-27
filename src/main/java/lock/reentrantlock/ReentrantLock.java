@@ -254,37 +254,40 @@ public class ReentrantLock implements Lock, java.io.Serializable {
     }
 
     public static ReentrantLock lock = new ReentrantLock(true);
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         diffThreadReentrant();
     }
 
-    public static void diffThreadReentrant() {
+    public static void diffThreadReentrant() throws InterruptedException {
         Thread a = new Thread(() -> {
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < 10; i++) {
                 threadA();
                 System.out.println(getState());
             }
-
+            lock.sync.tryRelease(10);
         },"四");
 
         Thread b = new Thread(() -> {
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < 10; i++) {
                 threadA();
                 System.out.println(getState());
             }
-            lock.unlock();
+            lock.sync.tryRelease(10);
         },"二");
 
         Thread c = new Thread(() -> {
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < 10; i++) {
                 threadA();
                 System.out.println(getState());
             }
-            lock.unlock();
+            lock.sync.tryRelease(10);
         },"三");
         a.start();
+        a.join();
         b.start();
+        b.join();
         c.start();
+        c.join();
         Collection<Thread> queuedThreads = lock.sync.getQueuedThreads();
         Thread owner = lock.sync.getOwner();
         Collection<Thread> exclusiveQueuedThreads = lock.sync.getExclusiveQueuedThreads();
@@ -292,15 +295,10 @@ public class ReentrantLock implements Lock, java.io.Serializable {
     }
 
     public static void threadA(){
-        try {
+
             lock.lock();
             System.out.println(Thread.currentThread().getName() + " coming threadA");
-        } catch (Exception e) {
 
-        }finally {
-//            System.out.println("unlock thread A");
-//            lock.unlock();
-        }
     }
 
     public static int getState() {

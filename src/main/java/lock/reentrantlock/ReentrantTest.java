@@ -35,6 +35,7 @@ public class ReentrantTest {
     }
 
     public int getState() {
+        lock.unlock();
         return lock.getHoldCount();
 
     }
